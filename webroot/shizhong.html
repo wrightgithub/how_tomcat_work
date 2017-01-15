@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>时钟</title>
+</head>
+<body>
+<embed wmode="transparent"
+       src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_tr.swf"
+       quality="high" bgcolor="#ffffff" width="250" height="100" name="honehoneclock"
+       align="middle" allowscriptaccess="always"
+       type="application/x-shockwave-flash"
+       pluginspage=""
+       title="Adobe Flash Player"/>
+<script type="text/javascript">(function () {
+    document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));
+    var bdcs = document.createElement('script');
+    bdcs.type = 'text/javascript';
+    bdcs.async = true;
+    bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=7301050937425730403' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date() / 3600000);
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(bdcs, s);
+})();</script>
+</body>
+</html>
