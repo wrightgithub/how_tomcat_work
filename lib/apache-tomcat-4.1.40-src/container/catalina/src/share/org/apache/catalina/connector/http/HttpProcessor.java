@@ -974,6 +974,7 @@ final class HttpProcessor
                 ((HttpServletResponse) response).setHeader
                     ("Date", FastHttpDateFormat.getCurrentDate());
                 if (ok) {
+                    // 调用容器的invoke方法，例如ex04的 SimpleContainer 
                     connector.getContainer().invoke(request, response);
                 }
             } catch (ServletException e) {
