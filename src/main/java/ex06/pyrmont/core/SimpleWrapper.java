@@ -1,4 +1,4 @@
-package ex05.pyrmont.core;
+package ex06.pyrmont.core;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -11,6 +11,9 @@ import org.apache.catalina.Cluster;
 import org.apache.catalina.Container;
 import org.apache.catalina.ContainerListener;
 import org.apache.catalina.InstanceListener;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleException;
+import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Loader;
 import org.apache.catalina.Logger;
 import org.apache.catalina.Manager;
@@ -21,23 +24,23 @@ import org.apache.catalina.Request;
 import org.apache.catalina.Response;
 import org.apache.catalina.Valve;
 import org.apache.catalina.Wrapper;
+import org.apache.catalina.util.LifecycleSupport;
 
+public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle {
 
-
-public class SimpleWrapper implements Wrapper, Pipeline {
+  public SimpleWrapper() {
+    pipeline.setBasic(new SimpleWrapperValve());
+  }
 
   // the servlet instance
   private Servlet instance = null;
   private String servletClass;
   private Loader loader;
   private String name;
+  protected LifecycleSupport lifecycle = new LifecycleSupport(this);
   private SimplePipeline pipeline = new SimplePipeline(this);
   protected Container parent = null;
-
-  public SimpleWrapper() {
-    // 基本valve 最后调用的valve，执行servlet实例的service等一系列方法。
-    pipeline.setBasic(new SimpleWrapperValve());
-  }
+  protected boolean started = false;
 
   public synchronized void addValve(Valve valve) {
     pipeline.addValve(valve);
@@ -59,7 +62,7 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     return instance;
   }
 
-  private Servlet loadServlet() throws ServletException {
+  public Servlet loadServlet() throws ServletException {
     if (instance!=null)
       return instance;
 
@@ -284,7 +287,6 @@ public class SimpleWrapper implements Wrapper, Pipeline {
   }
 
   public void load() throws ServletException {
-    instance = loadServlet();
   }
 
   public Container map(Request request, boolean update) {
@@ -335,4 +337,69 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     pipeline.removeValve(valve);
   }
 
+  // implementation of the Lifecycle interface's methods
+  public void addLifecycleListener(LifecycleListener listener) {
+  }
+
+  public LifecycleListener[] findLifecycleListeners() {
+    return null;
+  }
+
+  public void removeLifecycleListener(LifecycleListener listener) {
+  }
+
+  public synchronized void start() throws LifecycleException {
+    System.out.println("Starting Wrapper " + name);
+    if (started)
+      throw new LifecycleException("Wrapper already started");
+
+    // Notify our interested LifecycleListeners
+    lifecycle.fireLifecycleEvent(BEFORE_START_EVENT, null);
+    started = true;
+
+    // Start our subordinate components, if any
+    if ((loader != null) && (loader instanceof Lifecycle))
+      ((Lifecycle) loader).start();
+
+    // Start the Valves in our pipeline (including the basic), if any
+    if (pipeline instanceof Lifecycle)
+      ((Lifecycle) pipeline).start();
+
+    // Notify our interested LifecycleListeners
+    lifecycle.fireLifecycleEvent(START_EVENT, null);
+    // Notify our interested LifecycleListeners
+    lifecycle.fireLifecycleEvent(AFTER_START_EVENT, null);
+  }
+
+  public void stop() throws LifecycleException {
+    System.out.println("Stopping wrapper " + name);
+    // Shut down our servlet instance (if it has been initialized)
+    try {
+      instance.destroy();
+    }
+    catch (Throwable t) {
+    }
+    instance = null;
+    if (!started)
+      throw new LifecycleException("Wrapper " + name + " not started");
+    // Notify our interested LifecycleListeners
+    lifecycle.fireLifecycleEvent(BEFORE_STOP_EVENT, null);
+
+    // Notify our interested LifecycleListeners
+    lifecycle.fireLifecycleEvent(STOP_EVENT, null);
+    started = false;
+
+    // Stop the Valves in our pipeline (including the basic), if any
+    if (pipeline instanceof Lifecycle) {
+      ((Lifecycle) pipeline).stop();
+    }
+
+    // Stop our subordinate components, if any
+    if ((loader != null) && (loader instanceof Lifecycle)) {
+      ((Lifecycle) loader).stop();
+    }
+
+    // Notify our interested LifecycleListeners
+    lifecycle.fireLifecycleEvent(AFTER_STOP_EVENT, null);
+  }
 }

@@ -16,20 +16,24 @@ public final class Bootstrap1 {
 /* call by using http://localhost:8080/ModernServlet,
    but could be invoked by any name */
 
+    // 1
     HttpConnector connector = new HttpConnector();
+    // 2
     Wrapper wrapper = new SimpleWrapper();
     wrapper.setServletClass("ModernServlet");
+    // 3
     Loader loader = new SimpleLoader();
     Valve valve1 = new HeaderLoggerValve();
     Valve valve2 = new ClientIPLoggerValve();
-
+    // 4
     wrapper.setLoader(loader);
     ((Pipeline) wrapper).addValve(valve1);
     ((Pipeline) wrapper).addValve(valve2);
-
+    // 5
     connector.setContainer(wrapper);
 
     try {
+      // 6
       connector.initialize();
       connector.start();
 

@@ -331,6 +331,8 @@ final class HttpProcessor
 
         // Notify the Connector that we have received this Socket
         Socket socket = this.socket;
+        // 由于当前的 processor是从stack processors上pop出来的，所以，此处available = false;
+        // 不会出现一个processor同时处理两个socket的情况。
         available = false;
         notifyAll();
 
@@ -903,7 +905,6 @@ final class HttpProcessor
 
             finishResponse = true;
 
-            // 获得输出流，并对请求和响应对象做些初始化处理。
             try {
                 request.setStream(input);
                 request.setResponse(response);
@@ -974,7 +975,6 @@ final class HttpProcessor
                 ((HttpServletResponse) response).setHeader
                     ("Date", FastHttpDateFormat.getCurrentDate());
                 if (ok) {
-                    // 调用容器的invoke方法，例如ex04的 SimpleContainer 
                     connector.getContainer().invoke(request, response);
                 }
             } catch (ServletException e) {

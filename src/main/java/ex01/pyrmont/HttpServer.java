@@ -35,7 +35,7 @@ public class HttpServer {
     ServerSocket serverSocket = null;
     int port = 8080;
     try {
-      serverSocket =  new ServerSocket(port, 1, InetAddress.getByName("192.168.0.104"));
+      serverSocket =  new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
     }
     catch (IOException e) {
       e.printStackTrace();
@@ -49,6 +49,7 @@ public class HttpServer {
       OutputStream output = null;
       try {
         socket = serverSocket.accept();
+        System.out.println("receive a socket");
         input = socket.getInputStream();
         output = socket.getOutputStream();
 

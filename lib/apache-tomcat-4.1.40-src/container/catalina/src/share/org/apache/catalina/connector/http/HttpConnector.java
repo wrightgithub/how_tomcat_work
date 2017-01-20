@@ -974,6 +974,7 @@ public final class HttpConnector
                 //                    log("run: Returned from serverSocket.accept()");
                 if (connectionTimeout > 0)
                     socket.setSoTimeout(connectionTimeout);
+                // 关闭Nagle算法，防止神奇的40ms延时
                 socket.setTcpNoDelay(tcpNoDelay);
             } catch (AccessControlException ace) {
                 log("socket accept security exception", ace);
@@ -1022,6 +1023,7 @@ public final class HttpConnector
 
             // Hand this socket off to an appropriate processor
             HttpProcessor processor = createProcessor();
+            // 没有可用处理器就关闭socket。
             if (processor == null) {
                 try {
                     log(sm.getString("httpConnector.noProcessor"));
@@ -1180,6 +1182,7 @@ public final class HttpConnector
 
         // Create the specified minimum number of processors
         while (curProcessors < minProcessors) {
+            // 万一出现maxProcessors<minProcessors,可以break;
             if ((maxProcessors > 0) && (curProcessors >= maxProcessors))
                 break;
             HttpProcessor processor = newProcessor();
