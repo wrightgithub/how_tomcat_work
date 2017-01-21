@@ -58,6 +58,7 @@ public final class Bootstrap {
       ((Lifecycle) context).start();
       // now we want to know some details about WebappLoader
       WebappClassLoader classLoader = (WebappClassLoader) loader.getClassLoader();
+      classLoader.setDebug(4);
       System.out.println("Resources' docBase: " + ((ProxyDirContext)classLoader.getResources()).getDocBase());
       String[] repositories = classLoader.findRepositories();
       for (int i=0; i<repositories.length; i++) {
