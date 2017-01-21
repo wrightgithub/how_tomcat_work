@@ -1,5 +1,0 @@
-This is before the include
-This is the include
-
-This is after the include
-

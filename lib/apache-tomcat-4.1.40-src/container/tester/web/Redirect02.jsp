@@ -1,1 +1,0 @@
-<%@ page contentType="text/plain" %><% String dummy = null; if (dummy == null) { response.sendRedirect(request.getContextPath() + "/Redirect02a.jsp"); return; } %>Redirect02.jsp FAILED - Content should not be visible

@@ -1,5 +1,0 @@
-==========
-Include06a output
-==========
-Include06b.jsp output
-==========

@@ -1,4 +1,0 @@
-<!--#set var="test" value="value of test" -->
-<!--#set var="test2" value="${test}" -->
-<!--#echo var="test2" -->
-
