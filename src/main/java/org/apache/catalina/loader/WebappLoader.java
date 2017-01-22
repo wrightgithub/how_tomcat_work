@@ -1349,6 +1349,7 @@ public class WebappLoader
                 continue;
             }
 
+            System.out.println("will reload ");
             // Handle a need for reloading
             notifyContext();
             break;

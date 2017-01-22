@@ -47,7 +47,9 @@ public final class Bootstrap {
 
     // here is our loader
     Loader loader = new WebappLoader();
+    loader.setReloadable(true);
     // associate the loader with the Context
+    context.setReloadable(true);
     context.setLoader(loader);
 
     connector.setContainer(context);

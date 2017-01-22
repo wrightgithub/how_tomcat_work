@@ -11,31 +11,32 @@ import java.io.InputStream;
 
 public class FileSystemClassLoader extends ClassLoader {
 
-    private String loaderName="FileSystemClassLoader";
+    private String  loaderName = "FileSystemClassLoader";
     private String  rootDir;
-    private boolean localFirst=true;
+    private boolean localFirst = true;
 
     public FileSystemClassLoader(boolean localFirst, String rootDir) {
         this.rootDir = rootDir;
         this.localFirst = localFirst;
     }
-    public FileSystemClassLoader(String rootDir,String loaderName) {
+
+    public FileSystemClassLoader(String rootDir, String loaderName) {
         super();// parent 设为Application ClassLoader
         this.rootDir = rootDir;
-        this.loaderName=loaderName;
+        this.loaderName = loaderName;
     }
-    public FileSystemClassLoader(ClassLoader parent,String rootDir,String loaderName) {
+
+    public FileSystemClassLoader(ClassLoader parent, String rootDir, String loaderName) {
         super(parent);
         this.rootDir = rootDir;
-        this.loaderName=loaderName;
+        this.loaderName = loaderName;
     }
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         if (localFirst) {
-            /**
-             * 找不到时，用父类的loadClass
-             */
+
+            // 找不到时，用父类的loadClass
             Class clazz = findClass(name);
             if (clazz != null) {
                 return clazz;
@@ -70,9 +71,9 @@ public class FileSystemClassLoader extends ClassLoader {
             }
             return baos.toByteArray();
         } catch (IOException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
             // 这里由于如果本次找不到是会报异常的，所以catch掉，然后往上找classloader
-            System.out.println("in getClassData error: "+className);
+            // System.out.println("in getClassData error: " + className);
         }
         return null;
     }
