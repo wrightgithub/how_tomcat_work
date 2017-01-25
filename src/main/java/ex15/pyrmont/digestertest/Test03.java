@@ -17,7 +17,7 @@ public class Test03 {
       ArrayList offices = employee.getOffices();
       Iterator iterator = offices.iterator();
       System.out.println("-------------------------------------------------");
-      while (iterator.hasNext()) {
+      while (iterator.hasNext())  {
         Office office = (Office) iterator.next();
         Address address = office.getAddress();
         System.out.println(office.getDescription());
