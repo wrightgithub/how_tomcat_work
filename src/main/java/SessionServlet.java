@@ -18,8 +18,9 @@ public class SessionServlet extends HttpServlet {
     String value = request.getParameter("value");
     HttpSession session = request.getSession(true);
     out.println("<br>the previous value is " + 
-      (String) session.getAttribute("value"));
+      (String) session.getAttribute("value"));  // 获取value  从session中。
     out.println("<br>the current value is " + value);
+    // 存储value  到session中。
     session.setAttribute("value", value);
     out.println("<br><hr>");
     out.println("<form>");

@@ -84,6 +84,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Random;
 
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
+import javax.management.RuntimeOperationsException;
 import javax.naming.directory.DirContext;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -383,7 +386,7 @@ public final class StandardServer
     /**
      * Set the global naming resources.
      *
-     * @param namingResources The new global naming resources
+     * @param globalNamingResources The new global naming resources
      */
     public void setGlobalNamingResources
         (NamingResources globalNamingResources) {
@@ -1966,7 +1969,7 @@ public final class StandardServer
      *
      * @param writer PrintWriter to which we are storing
      * @param indent Number of spaces to indent this element
-     * @param server Object to be stored
+     * @param service Object to be stored
      *
      * @exception Exception if an exception occurs while storing
      */
